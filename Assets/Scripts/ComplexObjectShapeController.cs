@@ -13,7 +13,7 @@ public class ComplexObjectShapeController : MonoBehaviour {
 	It does not have an actual functional role in the project, it is just a visual aid to help the 
 	user correlate som of the audio's behaviour to a visual analogue.*/
 
-	public ProceduralAudioController audioController;
+	//public ProceduralAudioController audioController;
 	public GameObject body;
 	public GameObject upPart;
 	public GameObject downPart;
@@ -35,10 +35,10 @@ public class ComplexObjectShapeController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		float scale = mapValue (audioController.amplitudeModulationRangeOut, 0.0f, 1.0f, 1.5f, 2.5f);
-		body.transform.localScale = new Vector3 (scale, scale, scale);
+		//float scale = mapValue (audioController.amplitudeModulationRangeOut, 0.0f, 1.0f, 1.5f, 2.5f);
+		body.transform.localScale = Vector3.Lerp(body.transform.localScale, new Vector3(1, 1, 1), .3f);
 
-		float rotRang = audioController.frequencyModulationRangeOut * 360.0f * audioController.frequencyModulationOscillatorIntensity / 100.0f;
+		/*float rotRang = audioController.frequencyModulationRangeOut * 360.0f * audioController.frequencyModulationOscillatorIntensity / 100.0f;
 		upPart.transform.localRotation = Quaternion.Euler (0.0f, rotRang,0.0f);
 		downPart.transform.localRotation = Quaternion.Euler (0.0f, -rotRang,0.0f);
 		leftPart.transform.localRotation = Quaternion.Euler (rotRang, 0.0f,0.0f);
@@ -53,7 +53,7 @@ public class ComplexObjectShapeController : MonoBehaviour {
 		leftPart.transform.localScale = new Vector3 (freqScaleY,freqScaleXZ,freqScaleXZ);
 		rightPart.transform.localScale = new Vector3 (freqScaleY,freqScaleXZ,freqScaleXZ);
 		frontPart.transform.localScale = new Vector3 (freqScaleXZ,freqScaleXZ,freqScaleY);
-		backPart.transform.localScale = new Vector3 (freqScaleXZ,freqScaleXZ,freqScaleY);
+		backPart.transform.localScale = new Vector3 (freqScaleXZ,freqScaleXZ,freqScaleY);*/
 
 		transform.Rotate(Vector3.right * Time.deltaTime * xRotFactor);
 		transform.Rotate(Vector3.up * Time.deltaTime * yRotFactor);

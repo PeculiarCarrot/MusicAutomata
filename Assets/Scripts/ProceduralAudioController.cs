@@ -9,7 +9,7 @@ using UnityEngine;
 using System;
 
 [RequireComponent(typeof (AudioSource))]
-public class ProceduralAudioController : MonoBehaviour {
+public class ProceduralAudioController : ScriptableObject{
 	/* This class is the main audio engine, 
 	- It uses the OnAudioFilterRead() function to create sound by applying mathematical functions
 	on each separate audio sample.
@@ -29,21 +29,21 @@ public class ProceduralAudioController : MonoBehaviour {
 
 	[Header("Volume / Frequency")]
 	[Range(0.0f,1.0f)]
-	public float masterVolume = 0.5f;
-	[Range(0,3000)]
+	public float masterVolume = 0;
+	[Range(50,3000)]
 	public double mainFrequency = 500;
 	[Space(10)]
 
 	[Header("Tone Adjustment")]
-	public bool useSinusAudioWave;
+	public bool useSinusAudioWave = true;
 	[Range(0.0f,1.0f)]
 	public float sinusAudioWaveIntensity = 0.25f;
 	[Space(5)]
-	public bool useSquareAudioWave;
+	public bool useSquareAudioWave = true;
 	[Range(0.0f,1.0f)]
 	public float squareAudioWaveIntensity = 0.25f;
 	[Space(5)]
-	public bool useSawAudioWave;
+	public bool useSawAudioWave = true;
 	[Range(0.0f,1.0f)]
 	public float sawAudioWaveIntensity = 0.25f;
 
@@ -77,7 +77,10 @@ public class ProceduralAudioController : MonoBehaviour {
 	double dspTimeStep;
 	double currentDspTime;
 
-	void Awake(){
+	public float attack = .1f;
+	public float volume = .5f;
+
+	public void Awake(){
 		sawAudioWave = new SawWave ();
 		squareAudioWave = new SquareWave ();
 		sinusAudioWave = new SinusWave ();
@@ -88,7 +91,8 @@ public class ProceduralAudioController : MonoBehaviour {
 		sampleRate = AudioSettings.outputSampleRate;
 	}
 
-	void Update(){
+	public void Update(){
+		masterVolume = Mathf.Lerp(masterVolume, volume, attack);
 		if (autoPlay) {
 			if(!useSinusAudioWave){
 				useSinusAudioWave = true;
@@ -115,7 +119,7 @@ public class ProceduralAudioController : MonoBehaviour {
 		}
 	}
 
-	void OnAudioFilterRead(float[] data, int channels){
+	public void OnAudioFilterRead(float[] data, int channels){
 		/* This is called by the system
 		suppose: sampleRate = 48000
 		suppose: data.Length = 2048
@@ -165,7 +169,7 @@ public class ProceduralAudioController : MonoBehaviour {
 			float x = masterVolume * 0.5f * (float)signalValue;
 
 			for (int j = 0; j < channels; j++) {
-				data[i * channels + j] = x;
+				data[i * channels + j] += x;
 			}
 		}
 
